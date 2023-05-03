@@ -1,6 +1,9 @@
 package db;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
+import java.util.Properties;
 
 public class DB {
 
@@ -14,18 +17,29 @@ public class DB {
                 conn = DriverManager.getConnection(url);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new DbException(e.getMessage());
         }
         return conn;
     }
 
-    public static void closeConnection(ResultSet rs) {
+    public static void closeConnection() {
         if (conn != null) {
             try {
                 conn.close();
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                throw new DbException(e.getMessage());
             }
+        }
+    }
+
+    private static Properties loadProperties() {
+        try (FileInputStream fs = new FileInputStream("db.properties")) {
+            Properties props = new Properties();
+            props.load(fs);
+            return props;
+        }
+        catch (IOException e) {
+            throw new DbException(e.getMessage());
         }
     }
 
@@ -34,7 +48,7 @@ public class DB {
             try {
                 st.close();
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                throw new DbException(e.getMessage());
             }
         }
     }
@@ -44,7 +58,7 @@ public class DB {
             try {
                 rs.close();
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                throw new DbException(e.getMessage());
             }
         }
     }

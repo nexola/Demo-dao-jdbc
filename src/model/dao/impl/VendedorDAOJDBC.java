@@ -1,6 +1,7 @@
 package model.dao.impl;
 
 import db.DB;
+import db.DbException;
 import db.DbIntegrityException;
 import model.dao.VendedorDAO;
 import model.entities.Departamento;
@@ -10,7 +11,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class VendedorDAOJDBC implements VendedorDAO {
 
@@ -68,7 +72,7 @@ public class VendedorDAOJDBC implements VendedorDAO {
             throw new DbIntegrityException(e.getMessage());
         } finally {
             DB.closeStatement(st);
-            DB.closeConnection(rs);
+            DB.closeResultSet(rs);
         }
     }
 
@@ -93,5 +97,49 @@ public class VendedorDAOJDBC implements VendedorDAO {
     @Override
     public List<Vendedor> procurarTudo() {
         return null;
+    }
+
+    @Override
+    public List<Vendedor> procurarPorDepartamento(Departamento departamento) {
+
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            st = conn.prepareStatement("SELECT seller.*,department.Name as DepName " +
+                    "FROM seller INNER JOIN department " +
+                    "ON seller.DepartmentId = department.Id " +
+                    "WHERE DepartmentId = ? " +
+                    "ORDER BY Name");
+
+            st.setInt(1, departamento.getId()); // Faz a busca baseado no ID do departamento
+            rs = st.executeQuery(); // Executa a busca retornando ao ResultSet o objeto da tabela
+
+            List<Vendedor> lista = new ArrayList<>();
+            Map<Integer, Departamento> map = new HashMap<>();
+
+            while (rs.next()) {
+
+                Departamento dep = map.get(rs.getInt("DepartmentId"));
+
+                // Um departamento apenas para x vendedores presentes na lista
+                if (dep == null) {
+                    // Instanciando o departamento
+                    dep = instanciarDepartamento(rs);
+                    map.put(rs.getInt("DepartmentId"), dep);
+                }
+
+                // Instanciando o vendedor
+                Vendedor obj = instanciarVendedor(rs, dep);
+
+                lista.add(obj);
+            }
+            return lista;
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
     }
 }
