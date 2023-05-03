@@ -1,8 +1,7 @@
 package model.entities;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Objects;
 
 public class Vendedor implements Serializable {
@@ -10,17 +9,17 @@ public class Vendedor implements Serializable {
     private Integer id;
     private String nome;
     private String email;
-    private LocalDate dataDeNascimento;
+    private Date aniversario;
     private Double salarioBase;
     private Departamento departamento;
 
     public Vendedor() {}
 
-    public Vendedor(Integer id, String nome, String email, LocalDate aniversario, Double salarioBase, Departamento departamento) {
+    public Vendedor(Integer id, String nome, String email, Date aniversario, Double salarioBase, Departamento departamento) {
         this.id = id;
         this.nome = nome;
         this.email = email;
-        this.dataDeNascimento = aniversario;
+        this.aniversario = aniversario;
         this.salarioBase = salarioBase;
         this.departamento = departamento;
     }
@@ -49,12 +48,12 @@ public class Vendedor implements Serializable {
         this.email = email;
     }
 
-    public LocalDate getAniversario() {
-        return dataDeNascimento;
+    public Date getAniversario() {
+        return aniversario;
     }
 
-    public void setAniversario(LocalDate aniversario) {
-        this.dataDeNascimento = aniversario;
+    public void setAniversario(Date aniversario) {
+        this.aniversario = aniversario;
     }
 
     public Double getSalarioBase() {
@@ -88,12 +87,11 @@ public class Vendedor implements Serializable {
 
     @Override
     public String toString() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return "Vendedor " + '\n' +
                 " ID: " + id + '\n' +
                 " Nome: " + nome + '\n' +
                 " Email: " + email + '\n' +
-                " Data de nascimento: " + dataDeNascimento.format(dtf) + '\n' +
+                " Data de nascimento: " + aniversario + '\n' +
                 " Salario base: $" + String.format("%.2f", salarioBase) + '\n' +
                 " Departamento: " + departamento;
     }
