@@ -5,6 +5,7 @@ import model.dao.VendedorDAO;
 import model.entities.Departamento;
 import model.entities.Vendedor;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -33,5 +34,10 @@ public class Programa {
         for (Vendedor vend : list) {
             System.out.println(vend);
         }
+
+        System.out.println("=== TESTE 4: Vendedor criar ===");
+        Vendedor novoVendedor = new Vendedor(null, "Greg", "greg@gmail.com", new Date(), 4000.0, departamento);
+        vendedorDAO.criar(novoVendedor);
+        System.out.println("Inserido! Novo ID = " + novoVendedor.getId());
     }
 }
