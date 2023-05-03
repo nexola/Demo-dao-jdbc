@@ -27,5 +27,11 @@ public class Programa {
             System.out.println(vend);
         }
 
+        System.out.println("=== TESTE 3: Vendedor procurarTudo ===");
+        list = vendedorDAO.procurarTudo();
+
+        for (Vendedor vend : list) {
+            System.out.println(vend);
+        }
     }
 }
