@@ -21,7 +21,6 @@ public class VendedorDAOJDBC implements VendedorDAO {
         this.conn = conn;
     }
 
-
     @Override
     public void criar(Vendedor obj) {
 
@@ -138,24 +137,6 @@ public class VendedorDAOJDBC implements VendedorDAO {
         }
     }
 
-    private Vendedor instanciarVendedor(ResultSet rs, Departamento dep) throws SQLException {
-        Vendedor obj = new Vendedor();
-        obj.setId(rs.getInt("Id"));
-        obj.setNome(rs.getString("Name"));
-        obj.setEmail(rs.getString("Email"));
-        obj.setSalarioBase(rs.getDouble("BaseSalary"));
-        obj.setAniversario(rs.getDate("BirthDate"));
-        obj.setDepartamento(dep);
-        return obj;
-    }
-
-    private Departamento instanciarDepartamento(ResultSet rs) throws SQLException {
-        Departamento dep = new Departamento();
-        dep.setId(rs.getInt("DepartmentId"));
-        dep.setNome(rs.getString("DepName"));
-        return dep;
-    }
-
     @Override
     public List<Vendedor> procurarTudo() {
 
@@ -240,5 +221,23 @@ public class VendedorDAOJDBC implements VendedorDAO {
             DB.closeStatement(st);
             DB.closeResultSet(rs);
         }
+    }
+
+    private Vendedor instanciarVendedor(ResultSet rs, Departamento dep) throws SQLException {
+        Vendedor obj = new Vendedor();
+        obj.setId(rs.getInt("Id"));
+        obj.setNome(rs.getString("Name"));
+        obj.setEmail(rs.getString("Email"));
+        obj.setSalarioBase(rs.getDouble("BaseSalary"));
+        obj.setAniversario(rs.getDate("BirthDate"));
+        obj.setDepartamento(dep);
+        return obj;
+    }
+
+    private Departamento instanciarDepartamento(ResultSet rs) throws SQLException {
+        Departamento dep = new Departamento();
+        dep.setId(rs.getInt("DepartmentId"));
+        dep.setNome(rs.getString("DepName"));
+        return dep;
     }
 }
