@@ -2,10 +2,8 @@ package model.dao.impl;
 
 import db.DB;
 import db.DbException;
-import db.DbIntegrityException;
 import model.dao.DepartamentoDAO;
 import model.entities.Departamento;
-import model.entities.Vendedor;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -80,13 +78,12 @@ public class DepartamentoDAOJDBC implements DepartamentoDAO {
         PreparedStatement st = null;
         try {
             st = conn.prepareStatement("INSERT INTO department " +
-                            "(Id, Name) " +
+                            "(Name) " +
                             "VALUES " +
-                            "(?, ?)",
+                            "(?)",
                     Statement.RETURN_GENERATED_KEYS);
 
-            st.setInt(1, obj.getId());
-            st.setString(2, obj.getNome());
+            st.setString(1, obj.getNome());
 
             int rowsAffected = st.executeUpdate();
 
